@@ -24,4 +24,25 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
+}
+#game-board .square:hover {
+    background-color: rgb(158, 186, 197);
+}
+
+.btn-container {
+    margin: 16px;
+    display: flex;
+    justify-content: center;
+}
+#btn-start {
+    padding: 8px 10px;
+    font-size: 32px;
+    background-color: rgb(80, 168, 255);
+    border: 2px blue solid;
+    cursor: pointer;
+}
+
+#btn-start:hover {
+    background-color: rgb(52, 154, 255);
 }

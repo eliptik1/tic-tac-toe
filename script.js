@@ -1,26 +1,41 @@
+
+const container = document.getElementById("game-board")
+
 // Gameboard module
 const Gameboard = (() => {
     const board = 
     [
-        0,0,0,
-        0,0,0,
-        0,0,0
+        "","","",
+        "","","",
+        "","",""
     ];
-    const container = document.getElementById("game-board")
+    
     const createBoard = () => {
         for(let i = 0; i<9; i++){
         const square = document.createElement("div")
         square.classList.add("square")
         container.append(square)
         }
+        console.log("board created")
+        render()
     }
     const render = ()=> {
+        console.log("rendered")
         board.forEach((marker, index)=> {
             container.childNodes[index].textContent = marker
         })
     }
     return { board, createBoard, render }
 })()
+
+//Start game
+const startBtn = document.getElementById("btn-start")
+startBtn.addEventListener("click", (e)=> {
+    Gameboard.createBoard();
+    Game.playTurn();
+    let btn = e.target;
+    btn.remove();
+})
 
 // createPlayer factory function
 const createPlayer = (name, marker) => {
@@ -34,12 +49,17 @@ const Game = (() => {
     let _currentPlayer = _player1
     
     const playTurn = () => {
-        // playTurn function
-        console.log("played")
-        switchPlayer()
+        container.addEventListener("click", (e)=> {
+            let squareIndex = Array.from(container.childNodes).indexOf(e.target)
+            Gameboard.board[squareIndex] = _currentPlayer.marker
+            Gameboard.render()
+            switchPlayer()
+        })
     }
+
     const switchPlayer = () => {
-        // switch function
+        _currentPlayer = _currentPlayer === _player1 ? _player2 : _player1
+        console.log("player switched")
     }
     return { playTurn }
 })()
