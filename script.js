@@ -51,7 +51,12 @@ const Game = (() => {
     const playTurn = () => {
         container.addEventListener("click", (e)=> {
             let squareIndex = Array.from(container.childNodes).indexOf(e.target)
-            Gameboard.board[squareIndex] = _currentPlayer.marker
+            if(Gameboard.board[squareIndex] === _currentPlayer.marker) {
+                switchPlayer()
+                Gameboard.board[squareIndex] = _currentPlayer.marker
+            } else {
+                Gameboard.board[squareIndex] = _currentPlayer.marker
+            }
             Gameboard.render()
             switchPlayer()
         })
