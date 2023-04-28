@@ -1,6 +1,3 @@
-
-const container = document.getElementById("game-board")
-
 // Gameboard module
 const Gameboard = (() => {
     const board = 
@@ -9,7 +6,37 @@ const Gameboard = (() => {
         "","","",
         "","",""
     ];
-    
+    const addMark = (squareIndex, player) => {
+        board[squareIndex] = player
+    }
+    return { board, addMark }
+})()
+
+// createPlayer factory function
+const createPlayer = (name, marker) => {
+    return {name, marker}
+}
+
+// Game controller module
+const Game = () => {
+    const _player1 = createPlayer("player1", "x")
+    const _player2 = createPlayer("player2", "o")
+    let _currentPlayer = _player1
+    const playTurn = (squareIndex) => {
+        Gameboard.addMark(squareIndex, getCurrentPlayer().marker);
+        switchPlayer()
+    }
+    const switchPlayer = () => {
+        _currentPlayer = _currentPlayer === _player1 ? _player2 : _player1
+    }
+    const getCurrentPlayer = () => _currentPlayer
+    return { playTurn, getCurrentPlayer }
+}
+
+//Screen controller module for DOM
+const ScreenController = (() => {
+    const container = document.getElementById("game-board")
+    const game = Game()
     const createBoard = () => {
         for(let i = 0; i<9; i++){
         const square = document.createElement("div")
@@ -19,46 +46,23 @@ const Gameboard = (() => {
         render()
     }
     const render = ()=> {
-        board.forEach((marker, index)=> {
+        Gameboard.board.forEach((marker, index)=> {
             container.childNodes[index].textContent = marker
         })
     }
-    return { board, createBoard, render }
-})()
-
-//Start game
-const startBtn = document.getElementById("btn-start")
-startBtn.addEventListener("click", (e)=> {
-    Gameboard.createBoard();
-    Game.playTurn();
-    let btn = e.target;
-    btn.remove();
-})
-
-// createPlayer factory function
-const createPlayer = (name, marker) => {
-    return {name, marker}
-}
-
-// Game controller module
-const Game = (() => {
-    const _player1 = createPlayer("player1", "x")
-    const _player2 = createPlayer("player2", "o")
-    let _currentPlayer = _player1
-    
-    const playTurn = () => {
-        container.addEventListener("click", (e)=> {
-            let squareIndex = Array.from(container.childNodes).indexOf(e.target)
-            if(Gameboard.board[squareIndex] === "") {
-                Gameboard.board[squareIndex] = _currentPlayer.marker
-                switchPlayer()
-            }
-            Gameboard.render()
-        })
-    }
-
-    const switchPlayer = () => {
-        _currentPlayer = _currentPlayer === _player1 ? _player2 : _player1
-    }
-    return { playTurn }
+    //Start game
+    const startBtn = document.getElementById("btn-start")
+    startBtn.addEventListener("click", (e)=> {
+        createBoard();
+        let btn = e.target;
+        btn.remove();
+    })
+    //Add marks to the squares
+    container.addEventListener("click", (e)=> {
+        let squareIndex = Array.from(container.childNodes).indexOf(e.target)
+        if(Gameboard.board[squareIndex] === "") {
+            game.playTurn(squareIndex)
+            render()
+        }
+    })
 })()
