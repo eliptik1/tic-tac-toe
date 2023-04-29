@@ -33,37 +33,16 @@ const Game = () => {
     }
     const getCurrentPlayer = () => _currentPlayer
     const checkWin = () => {
-        if(Gameboard.board[0] === _currentPlayer.marker &&
-            Gameboard.board[1] === _currentPlayer.marker &&
-            Gameboard.board[2] === _currentPlayer.marker ||
-            Gameboard.board[3] === _currentPlayer.marker &&
-            Gameboard.board[4] === _currentPlayer.marker &&
-            Gameboard.board[5] === _currentPlayer.marker ||
-            Gameboard.board[6] === _currentPlayer.marker &&
-            Gameboard.board[7] === _currentPlayer.marker &&
-            Gameboard.board[8] === _currentPlayer.marker ||
-
-            Gameboard.board[0] === _currentPlayer.marker &&
-            Gameboard.board[3] === _currentPlayer.marker &&
-            Gameboard.board[6] === _currentPlayer.marker ||
-            Gameboard.board[1] === _currentPlayer.marker &&
-            Gameboard.board[4] === _currentPlayer.marker &&
-            Gameboard.board[7] === _currentPlayer.marker ||
-            Gameboard.board[2] === _currentPlayer.marker &&
-            Gameboard.board[5] === _currentPlayer.marker &&
-            Gameboard.board[8] === _currentPlayer.marker ||
-
-            Gameboard.board[0] === _currentPlayer.marker &&
-            Gameboard.board[4] === _currentPlayer.marker &&
-            Gameboard.board[8] === _currentPlayer.marker ||
-            Gameboard.board[2] === _currentPlayer.marker &&
-            Gameboard.board[4] === _currentPlayer.marker &&
-            Gameboard.board[6] === _currentPlayer.marker
-            ) {
-            console.log(`${_currentPlayer.name} wins`)
-            finishGame()
-            console.log(isFinished)
-        } else if(Gameboard.board.filter(mark => mark === "").length === 0){
+        const combinations = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
+        for (let i = 0; i < combinations.length; i++) {
+            if(Gameboard.board[combinations[i][0]] === _currentPlayer.marker && 
+                Gameboard.board[combinations[i][1]] === _currentPlayer.marker &&
+                Gameboard.board[combinations[i][2]] === _currentPlayer.marker){
+                console.log(`${_currentPlayer.name} wins`)
+                finishGame()
+            }
+        }
+        if(Gameboard.board.filter(mark => mark === "").length === 0){
             console.log("Game is a tie!")
             finishGame()
         }
