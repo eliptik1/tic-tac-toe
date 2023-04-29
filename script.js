@@ -42,7 +42,7 @@ const Game = () => {
                 finishGame()
             }
         }
-        if(Gameboard.board.filter(mark => mark === "").length === 0){
+        if(Gameboard.board.filter(mark => mark === "").length === 0 && !isFinished){
             console.log("Game is a tie!")
             finishGame()
         }
