@@ -33,9 +33,12 @@
 .btn-container {
     margin: 16px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
-#btn-start {
+.btn {
+    width: fit-content;
     padding: 8px 10px;
     font-size: 32px;
     background-color: rgb(80, 168, 255);
@@ -43,6 +46,13 @@
     cursor: pointer;
 }
 
-#btn-start:hover {
+.hidden {
+    display: none;
+}
+#game-board.hidden {
+    display: none;
+}
+
+.btn:hover {
     background-color: rgb(52, 154, 255);
 }

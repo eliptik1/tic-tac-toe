@@ -52,8 +52,14 @@ const Game = () => {
         isFinished = true
     }
     const checkFinished = () => isFinished
-
-    return { playTurn, getCurrentPlayer, checkWin, checkFinished }
+    const restartGame = () => {
+        for(let i = 0 ; i < Gameboard.board.length; i ++){
+            Gameboard.board[i] = ""
+        }
+        _currentPlayer = _player1
+        isFinished = false
+    }
+    return { playTurn, getCurrentPlayer, checkWin, checkFinished, restartGame }
 }
 
 //Screen controller module for DOM
@@ -75,10 +81,18 @@ const ScreenController = (() => {
     }
     //Start game
     const startBtn = document.getElementById("btn-start")
+    const restartBtn = document.getElementById("btn-restart")
     startBtn.addEventListener("click", (e)=> {
         createBoard();
         let btn = e.target;
         btn.remove();
+        container.classList.remove("hidden")
+        restartBtn.classList.remove("hidden")
+    })
+    //Restart game
+    restartBtn.addEventListener("click", ()=> {
+        game.restartGame();
+        render();
     })
     //Add marks to the squares
     container.addEventListener("click", (e)=> {
