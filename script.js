@@ -19,8 +19,8 @@ const createPlayer = (name, marker) => {
 
 // Game controller module
 const Game = () => {
-    const _player1 = createPlayer("player1", "x")
-    const _player2 = createPlayer("player2", "o")
+    const _player1 = createPlayer("player1", "X")
+    const _player2 = createPlayer("player2", "O")
     let _currentPlayer = _player1
     let isFinished = false
     const playTurn = (squareIndex) => {
@@ -66,13 +66,23 @@ const Game = () => {
 const ScreenController = (() => {
     const container = document.getElementById("game-board")
     const game = Game()
+    let boardCreated = false
     const createBoard = () => {
         for(let i = 0; i<9; i++){
         const square = document.createElement("div")
         square.classList.add("square")
         container.append(square)
         }
+        container.childNodes[0].classList.add("tl-border")
+        container.childNodes[1].classList.add("t-border")
+        container.childNodes[2].classList.add("tr-border")
+        container.childNodes[3].classList.add("l-border")
+        container.childNodes[5].classList.add("r-border")
+        container.childNodes[6].classList.add("bl-border")
+        container.childNodes[7].classList.add("b-border")
+        container.childNodes[8].classList.add("br-border")
         render()
+        boardCreated = true
     }
     const render = ()=> {
         Gameboard.board.forEach((marker, index)=> {
@@ -82,15 +92,27 @@ const ScreenController = (() => {
     //Start game
     const startBtn = document.getElementById("btn-start")
     const restartBtn = document.getElementById("btn-restart")
+    const exitBtn = document.getElementById("btn-exit")
+    const title = document.querySelector(".title")
+    const pvpTitle = document.querySelector(".btn-container h2")
     startBtn.addEventListener("click", (e)=> {
-        createBoard();
+        if(boardCreated === false) createBoard()
         let btn = e.target;
-        btn.remove();
-        container.classList.remove("hidden")
-        restartBtn.classList.remove("hidden")
+        btn.classList.toggle("hidden")
+        container.classList.toggle("hidden")
+        restartBtn.classList.toggle("hidden")
+        exitBtn.classList.toggle("hidden")
+        title.classList.toggle("hidden")
+        pvpTitle.classList.toggle("hidden")
     })
     //Restart game
     restartBtn.addEventListener("click", ()=> {
+        game.restartGame();
+        render();
+    })
+    //Back to menu
+    exitBtn.addEventListener("click", ()=> {
+        startBtn.click();
         game.restartGame();
         render();
     })

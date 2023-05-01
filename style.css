@@ -2,32 +2,71 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: "source sans pro";
+}
+
+.title {
+    color: rgb(29, 66, 118);
+    font-size: 5rem;
+    display: flex;
+    justify-content: center;
+    padding: 8rem 0 5rem;
 }
 
 #game-board {
-    outline: 3px solid;
+    /* outline: 4px solid rgb(60, 69, 92); */
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
-    width: 600px;
-    height: 600px;
-    margin: 36px auto 0;
-    font-size: 36px;
+    width: 450px;
+    height: 450px;
+    margin: 8rem auto 0;
 }
 
-#game-board .square {
-    width: 200px;
-    height: 200px;
-    border: 3px solid black;
-    background-color: rgb(200, 214, 219);
-    font-size: 108px;
+.square {
+    border: 6px solid rgba(163, 167, 178);
+    /* background-color: rgb(200, 214, 219); */
+    color: rgb(40, 48, 68);
+    font-size: 5rem;
+    font-family: "reem kufi";
+    font-weight: 700;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+    line-height: 1;
     user-select: none;
 }
+.tl-border {
+    border-left: 0;
+    border-top: 0;
+}
+.t-border {
+    border-top: 0;
+}
+.tr-border {
+    border-right: 0;
+    border-top: 0;
+}
+.l-border {
+    border-left: 0;
+}
+.r-border {
+    border-right: 0;
+}
+.bl-border {
+    border-left: 0;
+    border-bottom: 0;
+}
+.b-border {
+    border-bottom: 0;
+}
+.br-border {
+    border-right: 0;
+    border-bottom: 0;
+}
 #game-board .square:hover {
-    background-color: rgb(158, 186, 197);
+    background-color: rgba(158, 186, 197, 0.233);
 }
 
 .btn-container {
@@ -39,11 +78,15 @@
 }
 .btn {
     width: fit-content;
+    margin-top: 0.7rem;
     padding: 8px 10px;
     font-size: 32px;
     background-color: rgb(80, 168, 255);
     border: 2px blue solid;
     cursor: pointer;
+}
+.buttons {
+    margin-top: 3rem;
 }
 
 .hidden {
