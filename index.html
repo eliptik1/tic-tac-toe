@@ -14,14 +14,17 @@
     <header>
         <h1 class="title">Tic-Tac-Toe</h1>
     </header>
-    <section class="selection">
-        
-    </section>
     <div class="hidden" id="game-board"></div>
+    <div class="result-container">
+        <h3 class="result">Player1 wins</h3>
+    </div>
     <div class="btn-container">
-        <h2>Player vs. Player:</h2>
-
-        <button class="btn" id="btn-start">Start game</button>
+        <h2 class="pvp-title">Player vs. Player:</h2>
+        <div id="players">
+            <input id="player1" type="text" maxlength="8" value="asd1">
+            <input id="player2" type="text" maxlength="8" value="fgh">
+        </div>
+        <button class="btn" id="btn-start">Start Game</button>
         <div class="buttons">
             <button class="btn hidden" id="btn-restart">Restart</button>
             <button class="btn hidden" id="btn-exit">Go Back</button>

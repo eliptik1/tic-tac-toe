@@ -94,7 +94,8 @@ const ScreenController = (() => {
     const restartBtn = document.getElementById("btn-restart")
     const exitBtn = document.getElementById("btn-exit")
     const title = document.querySelector(".title")
-    const pvpTitle = document.querySelector(".btn-container h2")
+    const pvpTitle = document.querySelector(".pvp-title")
+    const players = document.querySelector("#players")
     startBtn.addEventListener("click", (e)=> {
         if(boardCreated === false) createBoard()
         let btn = e.target;
@@ -104,6 +105,7 @@ const ScreenController = (() => {
         exitBtn.classList.toggle("hidden")
         title.classList.toggle("hidden")
         pvpTitle.classList.toggle("hidden")
+        players.classList.toggle("hidden")
     })
     //Restart game
     restartBtn.addEventListener("click", ()=> {

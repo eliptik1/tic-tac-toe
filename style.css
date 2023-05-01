@@ -70,23 +70,28 @@
 }
 
 .btn-container {
-    margin: 16px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 .btn {
-    width: fit-content;
+    flex: 1;
+    width: 150px;
     margin-top: 0.7rem;
-    padding: 8px 10px;
-    font-size: 32px;
-    background-color: rgb(80, 168, 255);
-    border: 2px blue solid;
+    padding: 6px 8px;
+    font-size: 24px;
+    font-weight: 600;
+    color: rgb(167, 189, 211);
+    background-color: rgba(80, 168, 255, 0);
+    border: 4px rgb(167, 189, 211) solid;
     cursor: pointer;
+    transition: all 0.3s;
 }
 .buttons {
-    margin-top: 3rem;
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
 }
 
 .hidden {
@@ -97,5 +102,36 @@
 }
 
 .btn:hover {
-    background-color: rgb(52, 154, 255);
+    background-color: rgba(255, 255, 255, 0.188);
+    border: 4px rgb(255, 159, 99) solid;
+    color: rgb(29, 88, 147);
+}
+
+.pvp-title {
+    margin: 16px;
+    color: rgb(100, 100, 100);
+}
+
+#players input {
+    color: rgb(104, 179, 255);
+    font-family: sans-serif;
+    font-weight: 700;
+    margin: 1rem;
+    padding: 0.3rem;
+    outline: none;
+    border: 3px solid rgb(255, 172, 83);
+    width: 120px;
+    text-align: center;
+    font-size: 24px;
+}
+
+.result-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.result {
+    margin-top: 2rem;
+    font-size: 2.5rem;
+    color: rgb(29, 66, 118);
 }
