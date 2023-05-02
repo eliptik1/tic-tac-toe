@@ -69,6 +69,13 @@
     background-color: rgba(158, 186, 197, 0.233);
 }
 
+.red {
+    color: rgb(121 147 255);
+}
+.green {
+    color: rgb(255, 188, 87);
+}
+
 .btn-container {
     display: flex;
     flex-direction: column;

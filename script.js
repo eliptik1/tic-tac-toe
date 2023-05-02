@@ -93,12 +93,21 @@ const ScreenController = (() => {
     const render = ()=> {
         Gameboard.board.forEach((marker, index)=> {
             container.childNodes[index].textContent = marker
+            //Add marker colors
+            if(Gameboard.board[index] === "X") container.childNodes[index].classList.add("red");
+            if(Gameboard.board[index] === "O") container.childNodes[index].classList.add("green");
         })
         if(game.checkFinished()) {
             result.textContent = `${game.getMessage()}`
         } else {
             result.textContent = `${game.clearMessage()}`
         }
+    }
+    const removeColors = () => {
+        container.childNodes.forEach(square => {
+            square.classList.remove("red")
+            square.classList.remove("green")
+        })
     }
     //Start game
     const startBtn = document.getElementById("btn-start")
@@ -123,12 +132,14 @@ const ScreenController = (() => {
     restartBtn.addEventListener("click", ()=> {
         game.restartGame();
         render();
+        removeColors();
     })
     //Back to menu
     exitBtn.addEventListener("click", ()=> {
         startBtn.click();
         game.restartGame();
         render();
+        removeColors();
     })
     //Add marks to the squares
     container.addEventListener("click", (e)=> {
