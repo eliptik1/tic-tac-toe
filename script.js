@@ -19,8 +19,11 @@ const createPlayer = (name, marker) => {
 
 // Game controller module
 const Game = () => {
-    const _player1 = createPlayer("player1", "X")
-    const _player2 = createPlayer("player2", "O")
+    const playerName1 = document.querySelector("#player1").value
+    const playerName2 = document.querySelector("#player2").value
+    const _player1 = createPlayer(playerName1, "X")
+    const _player2 = createPlayer(playerName2, "O")
+    console.log(playerName1)
     let _currentPlayer = _player1
     let isFinished = false
     const playTurn = (squareIndex) => {
@@ -38,19 +41,21 @@ const Game = () => {
             if(Gameboard.board[combinations[i][0]] === _currentPlayer.marker && 
                 Gameboard.board[combinations[i][1]] === _currentPlayer.marker &&
                 Gameboard.board[combinations[i][2]] === _currentPlayer.marker){
-                console.log(`${_currentPlayer.name} wins`)
-                finishGame()
+                finishGame(`${_currentPlayer.name} wins!`)
             }
         }
         if(Gameboard.board.filter(mark => mark === "").length === 0 && !isFinished){
-            console.log("Game is a tie!")
-            finishGame()
+            finishGame("Game is a tie!")
         }
     }
-    const finishGame = () => {
-        console.log("finished")
+    let msg
+    const finishGame = (message) => {
+        console.log(message)
         isFinished = true
+        msg = message
     }
+    const getMessage = () => msg
+    const clearMessage = () => msg = ""
     const checkFinished = () => isFinished
     const restartGame = () => {
         for(let i = 0 ; i < Gameboard.board.length; i ++){
@@ -59,13 +64,14 @@ const Game = () => {
         _currentPlayer = _player1
         isFinished = false
     }
-    return { playTurn, getCurrentPlayer, checkWin, checkFinished, restartGame }
+    return { playTurn, checkFinished, restartGame, getMessage, clearMessage }
 }
 
 //Screen controller module for DOM
 const ScreenController = (() => {
     const container = document.getElementById("game-board")
-    const game = Game()
+    const result = document.querySelector(".result")
+    let game = Game()
     let boardCreated = false
     const createBoard = () => {
         for(let i = 0; i<9; i++){
@@ -88,6 +94,11 @@ const ScreenController = (() => {
         Gameboard.board.forEach((marker, index)=> {
             container.childNodes[index].textContent = marker
         })
+        if(game.checkFinished()) {
+            result.textContent = `${game.getMessage()}`
+        } else {
+            result.textContent = `${game.clearMessage()}`
+        }
     }
     //Start game
     const startBtn = document.getElementById("btn-start")
@@ -97,6 +108,7 @@ const ScreenController = (() => {
     const pvpTitle = document.querySelector(".pvp-title")
     const players = document.querySelector("#players")
     startBtn.addEventListener("click", (e)=> {
+        game = Game() // re-assign the variable for updating playerName1 and playerName2
         if(boardCreated === false) createBoard()
         let btn = e.target;
         btn.classList.toggle("hidden")
