@@ -41,7 +41,8 @@ const Game = () => {
             if(Gameboard.board[combinations[i][0]] === _currentPlayer.marker && 
                 Gameboard.board[combinations[i][1]] === _currentPlayer.marker &&
                 Gameboard.board[combinations[i][2]] === _currentPlayer.marker){
-                finishGame(`${_currentPlayer.name} wins!`)
+                winner = _currentPlayer
+                finishGame(`${winner.name} wins!`)
             }
         }
         if(Gameboard.board.filter(mark => mark === "").length === 0 && !isFinished){
@@ -49,11 +50,13 @@ const Game = () => {
         }
     }
     let msg
+    let winner
     const finishGame = (message) => {
         console.log(message)
         isFinished = true
         msg = message
     }
+    const getWinner = () => winner
     const getMessage = () => msg
     const clearMessage = () => msg = ""
     const checkFinished = () => isFinished
@@ -64,7 +67,7 @@ const Game = () => {
         _currentPlayer = _player1
         isFinished = false
     }
-    return { playTurn, checkFinished, restartGame, getMessage, clearMessage }
+    return { playTurn, checkFinished, restartGame, getWinner, getMessage, clearMessage }
 }
 
 //Screen controller module for DOM
@@ -94,19 +97,23 @@ const ScreenController = (() => {
         Gameboard.board.forEach((marker, index)=> {
             container.childNodes[index].textContent = marker
             //Add marker colors
-            if(Gameboard.board[index] === "X") container.childNodes[index].classList.add("red");
-            if(Gameboard.board[index] === "O") container.childNodes[index].classList.add("green");
+            if(Gameboard.board[index] === "X") container.childNodes[index].classList.add("color1");
+            if(Gameboard.board[index] === "O") container.childNodes[index].classList.add("color2");
         })
         if(game.checkFinished()) {
             result.textContent = `${game.getMessage()}`
+            if(game.getWinner().marker === "X") result.classList.add("color1")
+            if(game.getWinner().marker === "O") result.classList.add("color2")
         } else {
             result.textContent = `${game.clearMessage()}`
         }
     }
     const removeColors = () => {
         container.childNodes.forEach(square => {
-            square.classList.remove("red")
-            square.classList.remove("green")
+            square.classList.remove("color1")
+            square.classList.remove("color2")
+            result.classList.remove("color1")
+            result.classList.remove("color2")
         })
     }
     //Start game

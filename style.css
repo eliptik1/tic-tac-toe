@@ -24,7 +24,7 @@
 }
 
 .square {
-    border: 6px solid rgba(163, 167, 178);
+    border: 6px solid rgb(202, 204, 210);
     /* background-color: rgb(200, 214, 219); */
     color: rgb(40, 48, 68);
     font-size: 5rem;
@@ -69,10 +69,10 @@
     background-color: rgba(158, 186, 197, 0.233);
 }
 
-.red {
+.color1 {
     color: rgb(121 147 255);
 }
-.green {
+.color2 {
     color: rgb(255, 188, 87);
 }
 
@@ -140,5 +140,5 @@
 .result {
     margin-top: 2rem;
     font-size: 2.5rem;
-    color: rgb(29, 66, 118);
+/*     color: rgb(29, 66, 118); */
 }
