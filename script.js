@@ -46,17 +46,19 @@ const Game = () => {
             }
         }
         if(Gameboard.board.filter(mark => mark === "").length === 0 && !isFinished){
+            isTie = true
             finishGame("Game is a tie!")
         }
     }
     let msg
     let winner
+    let isTie = false
     const finishGame = (message) => {
         console.log(message)
         isFinished = true
         msg = message
     }
-    const getWinner = () => winner
+    const getWinner = () => isTie ? isTie : winner
     const getMessage = () => msg
     const clearMessage = () => msg = ""
     const checkFinished = () => isFinished
@@ -66,6 +68,7 @@ const Game = () => {
         }
         _currentPlayer = _player1
         isFinished = false
+        isTie = false
     }
     return { playTurn, checkFinished, restartGame, getWinner, getMessage, clearMessage }
 }
@@ -102,6 +105,7 @@ const ScreenController = (() => {
         })
         if(game.checkFinished()) {
             result.textContent = `${game.getMessage()}`
+            if(game.getWinner() === true) result.style.color = "rgb(29, 66, 118)"
             if(game.getWinner().marker === "X") result.classList.add("color1")
             if(game.getWinner().marker === "O") result.classList.add("color2")
         } else {
@@ -114,6 +118,7 @@ const ScreenController = (() => {
             square.classList.remove("color2")
             result.classList.remove("color1")
             result.classList.remove("color2")
+            result.style.color = ""
         })
     }
     //Start game
