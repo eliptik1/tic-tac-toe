@@ -75,6 +75,9 @@
 .color2 {
     color: rgb(255, 188, 87);
 }
+.squareWin, #game-board .square.squareWin:hover  {
+    background-color: rgba(158, 186, 197, 0.233);
+}
 
 .btn-container {
     display: flex;

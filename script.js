@@ -43,6 +43,7 @@ const Game = () => {
                 Gameboard.board[combinations[i][2]] === _currentPlayer.marker){
                 winner = _currentPlayer
                 finishGame(`${winner.name} wins!`)
+                getWinIndexes(combinations[i][0], combinations[i][1], combinations[i][2])
             }
         }
         if(Gameboard.board.filter(mark => mark === "").length === 0 && !isFinished){
@@ -50,15 +51,21 @@ const Game = () => {
             finishGame("Game is a tie!")
         }
     }
+    let getWinIndexes = (a, b, c) => {
+        winArr = [a,b,c]
+    }
     let msg
     let winner
     let isTie = false
+    let winArr
     const finishGame = (message) => {
         console.log(message)
         isFinished = true
         msg = message
     }
     const getWinner = () => isTie ? isTie : winner
+    const getWinArr = () => winArr
+    const checkTieStatus = () => isTie
     const getMessage = () => msg
     const clearMessage = () => msg = ""
     const checkFinished = () => isFinished
@@ -70,7 +77,7 @@ const Game = () => {
         isFinished = false
         isTie = false
     }
-    return { playTurn, checkFinished, restartGame, getWinner, getMessage, clearMessage }
+    return { playTurn, checkFinished, restartGame, getWinner, getWinArr, checkTieStatus, getMessage, clearMessage }
 }
 
 //Screen controller module for DOM
@@ -104,6 +111,8 @@ const ScreenController = (() => {
             if(Gameboard.board[index] === "O") container.childNodes[index].classList.add("color2");
         })
         if(game.checkFinished()) {
+            console.log(game.getWinArr())
+            if (game.checkTieStatus() === false) game.getWinArr().forEach(index => container.childNodes[index].classList.add("squareWin"))
             result.textContent = `${game.getMessage()}`
             if(game.getWinner() === true) result.style.color = "rgb(29, 66, 118)"
             if(game.getWinner().marker === "X") result.classList.add("color1")
@@ -119,6 +128,7 @@ const ScreenController = (() => {
             result.classList.remove("color1")
             result.classList.remove("color2")
             result.style.color = ""
+            square.classList.remove("squareWin")
         })
     }
     //Start game
