@@ -18,21 +18,47 @@ const createPlayer = (name, marker) => {
 }
 
 // Game controller module
-const Game = () => {
+const Game = (gameMode) => {
     const playerName1 = document.querySelector("#player1").value
     const playerName2 = document.querySelector("#player2").value
-    const _player1 = createPlayer(playerName1, "X")
-    const _player2 = createPlayer(playerName2, "O")
-    console.log(playerName1)
+    let _player1 = createPlayer(playerName1, "X")
+    let _player2 = createPlayer(playerName2, "O")
+    if(gameMode === "PVP") {
+        console.log("PVP")
+        _player2 = createPlayer(playerName2, "O")
+    }
+    if(gameMode === "PVC") {
+        console.log("PVC")
+        _player1 = createPlayer(playerName1, "X")
+        _player2 = createPlayer("Computer", "O")
+    }
+    console.log(_player2)
     let _currentPlayer = _player1
     let isFinished = false
+    let legalMoves = [0,1,2,3,4,5,6,7,8]
     const playTurn = (squareIndex) => {
-        Gameboard.addMark(squareIndex, getCurrentPlayer().marker);
-        checkWin()
-        switchPlayer()
+        if(gameMode === "PVP"){
+            Gameboard.addMark(squareIndex, getCurrentPlayer().marker);
+            checkWin()
+            switchPlayer()
+        }
+        if(gameMode === "PVC") {
+            legalMoves = legalMoves.filter(item => item != squareIndex)
+            let randomIndex = legalMoves[Math.floor(Math.random()*legalMoves.length)]
+            console.log(randomIndex)
+            Gameboard.addMark(squareIndex, getCurrentPlayer().marker);
+            checkWin()
+            switchPlayer()
+            if(isFinished === true) return
+            Gameboard.addMark(randomIndex, getCurrentPlayer().marker)
+            legalMoves = legalMoves.filter(item => item != randomIndex)
+            checkWin()
+            switchPlayer()
+        }
     }
     const switchPlayer = () => {
         _currentPlayer = _currentPlayer === _player1 ? _player2 : _player1
+        
     }
     const getCurrentPlayer = () => _currentPlayer
     const checkWin = () => {
@@ -63,6 +89,7 @@ const Game = () => {
         isFinished = true
         msg = message
     }
+    const checkGameMode = () => gameMode
     const getWinner = () => isTie ? isTie : winner
     const getWinArr = () => winArr
     const checkTieStatus = () => isTie
@@ -77,7 +104,7 @@ const Game = () => {
         isFinished = false
         isTie = false
     }
-    return { playTurn, checkFinished, restartGame, getWinner, getWinArr, checkTieStatus, getMessage, clearMessage }
+    return { checkGameMode, playTurn, checkFinished, restartGame, getWinner, getWinArr, checkTieStatus, getMessage, clearMessage }
 }
 
 //Screen controller module for DOM
@@ -133,33 +160,44 @@ const ScreenController = (() => {
     }
     //Start game
     const startBtn = document.getElementById("btn-start")
+    const startBotBtn = document.getElementById("btn-start-bot")
     const restartBtn = document.getElementById("btn-restart")
     const exitBtn = document.getElementById("btn-exit")
     const title = document.querySelector(".title")
     const pvpTitle = document.querySelector(".pvp-title")
     const players = document.querySelector("#players")
-    startBtn.addEventListener("click", (e)=> {
-        game = Game() // re-assign the variable for updating playerName1 and playerName2
+    startBtn.addEventListener("click", ()=> {
+        toggleButtons()
+        game = Game("PVP") // re-assign the variable for updating playerName1 and playerName2
         if(boardCreated === false) createBoard()
-        let btn = e.target;
-        btn.classList.toggle("hidden")
+    })
+    startBotBtn.addEventListener("click", ()=> {
+        toggleButtons()
+        game = Game("PVC")
+        if(boardCreated === false) createBoard()
+    })
+    const toggleButtons = () => {
+        startBtn.classList.toggle("hidden")
+        startBotBtn.classList.toggle("hidden")
         container.classList.toggle("hidden")
         restartBtn.classList.toggle("hidden")
         exitBtn.classList.toggle("hidden")
         title.classList.toggle("hidden")
         pvpTitle.classList.toggle("hidden")
         players.classList.toggle("hidden")
-    })
+    }
     //Restart game
     restartBtn.addEventListener("click", ()=> {
+        if(game.checkGameMode() === "PVP") game = Game("PVP")
+        if(game.checkGameMode() === "PVC") game = Game("PVC")
         game.restartGame();
         render();
         removeColors();
     })
     //Back to menu
     exitBtn.addEventListener("click", ()=> {
-        startBtn.click();
         game.restartGame();
+        toggleButtons()
         render();
         removeColors();
     })
