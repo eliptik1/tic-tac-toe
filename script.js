@@ -24,15 +24,12 @@ const Game = (gameMode) => {
     let _player1 = createPlayer(playerName1, "X")
     let _player2 = createPlayer(playerName2, "O")
     if(gameMode === "PVP") {
-        console.log("PVP")
         _player2 = createPlayer(playerName2, "O")
     }
     if(gameMode === "PVC") {
-        console.log("PVC")
         _player1 = createPlayer(playerName1, "X")
         _player2 = createPlayer("Computer", "O")
     }
-    console.log(_player2)
     let _currentPlayer = _player1
     let isFinished = false
     let legalMoves = [0,1,2,3,4,5,6,7,8]
@@ -41,24 +38,29 @@ const Game = (gameMode) => {
             Gameboard.addMark(squareIndex, getCurrentPlayer().marker);
             checkWin()
             switchPlayer()
+            ScreenController.render()
         }
         if(gameMode === "PVC") {
             legalMoves = legalMoves.filter(item => item != squareIndex)
             let randomIndex = legalMoves[Math.floor(Math.random()*legalMoves.length)]
-            console.log(randomIndex)
             Gameboard.addMark(squareIndex, getCurrentPlayer().marker);
+            computerPlays = true
             checkWin()
             switchPlayer()
+            ScreenController.render()
             if(isFinished === true) return
-            Gameboard.addMark(randomIndex, getCurrentPlayer().marker)
-            legalMoves = legalMoves.filter(item => item != randomIndex)
-            checkWin()
-            switchPlayer()
+            setTimeout(()=> {
+                Gameboard.addMark(randomIndex, getCurrentPlayer().marker)
+                legalMoves = legalMoves.filter(item => item != randomIndex)
+                checkWin()
+                switchPlayer()
+                ScreenController.render()
+                computerPlays = false
+            }, 300)                       
         }
     }
     const switchPlayer = () => {
         _currentPlayer = _currentPlayer === _player1 ? _player2 : _player1
-        
     }
     const getCurrentPlayer = () => _currentPlayer
     const checkWin = () => {
@@ -84,12 +86,13 @@ const Game = (gameMode) => {
     let winner
     let isTie = false
     let winArr
+    let computerPlays = false
     const finishGame = (message) => {
-        console.log(message)
         isFinished = true
         msg = message
     }
     const checkGameMode = () => gameMode
+    const checkComputerTurn = () => computerPlays
     const getWinner = () => isTie ? isTie : winner
     const getWinArr = () => winArr
     const checkTieStatus = () => isTie
@@ -104,7 +107,7 @@ const Game = (gameMode) => {
         isFinished = false
         isTie = false
     }
-    return { checkGameMode, playTurn, checkFinished, restartGame, getWinner, getWinArr, checkTieStatus, getMessage, clearMessage }
+    return { checkGameMode, checkComputerTurn, playTurn, checkFinished, restartGame, getWinner, getWinArr, checkTieStatus, getMessage, clearMessage }
 }
 
 //Screen controller module for DOM
@@ -138,7 +141,6 @@ const ScreenController = (() => {
             if(Gameboard.board[index] === "O") container.childNodes[index].classList.add("color2");
         })
         if(game.checkFinished()) {
-            console.log(game.getWinArr())
             if (game.checkTieStatus() === false) game.getWinArr().forEach(index => container.childNodes[index].classList.add("squareWin"))
             result.textContent = `${game.getMessage()}`
             if(game.getWinner() === true) result.style.color = "rgb(29, 66, 118)"
@@ -204,9 +206,9 @@ const ScreenController = (() => {
     //Add marks to the squares
     container.addEventListener("click", (e)=> {
         let squareIndex = Array.from(container.childNodes).indexOf(e.target)
-        if(Gameboard.board[squareIndex] === "" && game.checkFinished() === false) {
-            game.playTurn(squareIndex)
-            render()
+        if(Gameboard.board[squareIndex] === "" && game.checkFinished() === false && game.checkComputerTurn() === false) {
+            game.playTurn(squareIndex)          
         }
     })
+    return {render}
 })()
