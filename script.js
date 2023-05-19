@@ -45,20 +45,30 @@ const Game = (gameMode) => {
         if(gameMode === "PVC") {
             legalMoves = legalMoves.filter(item => item != squareIndex)
             let randomIndex = legalMoves[Math.floor(Math.random()*legalMoves.length)]
-            Gameboard.addMark(squareIndex, getCurrentPlayer().marker);
-            computerPlays = true
-            checkWin()
-            switchPlayer()
-            ScreenController.render()
-            if(isFinished === true) return
-            setTimeout(()=> {
+            if(squareIndex === undefined) { //if we choose "O" and start/restart game, computer starts first without a squareIndex
+                switchPlayer()
                 Gameboard.addMark(randomIndex, getCurrentPlayer().marker)
                 legalMoves = legalMoves.filter(item => item != randomIndex)
                 checkWin()
                 switchPlayer()
                 ScreenController.render()
                 computerPlays = false
-            }, 300)   
+            } else {
+                Gameboard.addMark(squareIndex, getCurrentPlayer().marker);
+                computerPlays = true
+                checkWin()
+                switchPlayer()
+                ScreenController.render()
+                if(isFinished === true) return
+                setTimeout(()=> {
+                    Gameboard.addMark(randomIndex, getCurrentPlayer().marker)
+                    legalMoves = legalMoves.filter(item => item != randomIndex)
+                    checkWin()
+                    switchPlayer()
+                    ScreenController.render()
+                    computerPlays = false
+                }, 300)
+            }
         }
     }
     const switchPlayer = () => {
@@ -197,9 +207,9 @@ const ScreenController = (() => {
         if(game.checkGameMode() === "PVP") game = Game("PVP")
         if(game.checkGameMode() === "PVC") game = Game("PVC")
         game.restartGame();
-        if(game.checkGameMode() === "PVC" && game.playerOneMarker === "O") game.playTurn() // if we (Player1) choose "O", computer ("X") plays first
         render();
         removeColors();
+        if(game.checkGameMode() === "PVC" && game.playerOneMarker === "O") game.playTurn() // if we (Player1) choose "O", computer ("X") plays first
     })
     //Back to menu
     exitBtn.addEventListener("click", ()=> {
