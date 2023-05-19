@@ -21,14 +21,16 @@ const createPlayer = (name, marker) => {
 const Game = (gameMode) => {
     const playerName1 = document.querySelector("#player1").value
     const playerName2 = document.querySelector("#player2").value
-    let _player1 = createPlayer(playerName1, "X")
-    let _player2 = createPlayer(playerName2, "O")
+    let playerOneMarker = document.querySelector(`input[name="marker"]:checked`).value
+    let playerTwoMarker = document.querySelector(`input[name="marker"]:not(:checked)`).value
+    let _player1 = createPlayer(playerName1, playerOneMarker)
+    let _player2 = createPlayer(playerName2, playerTwoMarker)
     if(gameMode === "PVP") {
-        _player2 = createPlayer(playerName2, "O")
+        _player2 = createPlayer(playerName2, playerTwoMarker)
     }
-    if(gameMode === "PVC") {
-        _player1 = createPlayer(playerName1, "X")
-        _player2 = createPlayer("Computer", "O")
+    if(gameMode === "PVC" || gameMode === "PVC-hard") {
+        _player1 = createPlayer(playerName1, playerOneMarker)
+        _player2 = createPlayer("Computer", playerTwoMarker)
     }
     let _currentPlayer = _player1
     let isFinished = false
@@ -56,7 +58,7 @@ const Game = (gameMode) => {
                 switchPlayer()
                 ScreenController.render()
                 computerPlays = false
-            }, 300)                       
+            }, 300)   
         }
     }
     const switchPlayer = () => {
@@ -103,11 +105,10 @@ const Game = (gameMode) => {
         for(let i = 0 ; i < Gameboard.board.length; i ++){
             Gameboard.board[i] = ""
         }
-        _currentPlayer = _player1
         isFinished = false
         isTie = false
     }
-    return { checkGameMode, checkComputerTurn, playTurn, checkFinished, restartGame, getWinner, getWinArr, checkTieStatus, getMessage, clearMessage }
+    return { playerOneMarker, playerTwoMarker, checkGameMode, checkComputerTurn, playTurn, checkFinished, restartGame, getWinner, getWinArr, checkTieStatus, getMessage, clearMessage }
 }
 
 //Screen controller module for DOM
@@ -137,15 +138,15 @@ const ScreenController = (() => {
         Gameboard.board.forEach((marker, index)=> {
             container.childNodes[index].textContent = marker
             //Add marker colors
-            if(Gameboard.board[index] === "X") container.childNodes[index].classList.add("color1");
-            if(Gameboard.board[index] === "O") container.childNodes[index].classList.add("color2");
+            if(Gameboard.board[index] === game.playerOneMarker) container.childNodes[index].classList.add("color1");
+            if(Gameboard.board[index] === game.playerTwoMarker) container.childNodes[index].classList.add("color2");
         })
         if(game.checkFinished()) {
             if (game.checkTieStatus() === false) game.getWinArr().forEach(index => container.childNodes[index].classList.add("squareWin"))
             result.textContent = `${game.getMessage()}`
             if(game.getWinner() === true) result.style.color = "rgb(29, 66, 118)"
-            if(game.getWinner().marker === "X") result.classList.add("color1")
-            if(game.getWinner().marker === "O") result.classList.add("color2")
+            if(game.getWinner().marker === game.playerOneMarker) result.classList.add("color1")
+            if(game.getWinner().marker === game.playerTwoMarker) result.classList.add("color2")
         } else {
             result.textContent = `${game.clearMessage()}`
         }
@@ -163,11 +164,12 @@ const ScreenController = (() => {
     //Start game
     const startBtn = document.getElementById("btn-start")
     const startBotBtn = document.getElementById("btn-start-bot")
+    const startBotHardBtn = document.getElementById("btn-start-bot-hard")
     const restartBtn = document.getElementById("btn-restart")
     const exitBtn = document.getElementById("btn-exit")
     const title = document.querySelector(".title")
     const pvpTitle = document.querySelector(".pvp-title")
-    const players = document.querySelector("#players")
+    const players = document.querySelector(".players")
     startBtn.addEventListener("click", ()=> {
         toggleButtons()
         game = Game("PVP") // re-assign the variable for updating playerName1 and playerName2
@@ -177,10 +179,12 @@ const ScreenController = (() => {
         toggleButtons()
         game = Game("PVC")
         if(boardCreated === false) createBoard()
+        if(game.playerOneMarker === "O") game.playTurn() // if we (Player1) choose "O", computer ("X") plays first
     })
     const toggleButtons = () => {
         startBtn.classList.toggle("hidden")
         startBotBtn.classList.toggle("hidden")
+        startBotHardBtn.classList.toggle("hidden")
         container.classList.toggle("hidden")
         restartBtn.classList.toggle("hidden")
         exitBtn.classList.toggle("hidden")
@@ -193,6 +197,7 @@ const ScreenController = (() => {
         if(game.checkGameMode() === "PVP") game = Game("PVP")
         if(game.checkGameMode() === "PVC") game = Game("PVC")
         game.restartGame();
+        if(game.checkGameMode() === "PVC" && game.playerOneMarker === "O") game.playTurn() // if we (Player1) choose "O", computer ("X") plays first
         render();
         removeColors();
     })

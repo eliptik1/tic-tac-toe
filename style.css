@@ -104,9 +104,7 @@
     margin-top: 2rem;
 }
 
-.hidden {
-    display: none;
-}
+
 #game-board.hidden {
     display: none;
 }
@@ -121,11 +119,15 @@
     margin-top: 16px;
     color: rgb(100, 100, 100);
 }
-#players {
+.players {
     display: flex;
     align-items: center;
 }
-#players input[type="text"] {
+
+.hidden {
+    display: none;
+}
+.players input[type="text"] {
     color: rgb(104, 179, 255);
     font-family: sans-serif;
     font-weight: 700;
