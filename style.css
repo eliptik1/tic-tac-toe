@@ -121,8 +121,11 @@
     margin-top: 16px;
     color: rgb(100, 100, 100);
 }
-
-#players input {
+#players {
+    display: flex;
+    align-items: center;
+}
+#players input[type="text"] {
     color: rgb(104, 179, 255);
     font-family: sans-serif;
     font-weight: 700;
@@ -135,6 +138,27 @@
     font-size: 24px;
 }
 
+input[type="radio"]::before {
+    font-size: 48px;
+    content: "X";
+    position: relative;
+    top: -16px;
+}
+input[type="radio"][id="markerO"]::before {
+    content: "O";
+    left: -3px;
+}
+input[type="radio"] {
+    appearance: none;
+    width: 50px;
+    height: 50px;
+    margin: 0.2rem;
+}
+input[type="radio"]:checked { 
+    border: 4px rgb(255, 159, 99) solid;
+    color: rgb(29, 88, 147);
+    background-color: rgb(232, 240, 255);
+}
 .result-container {
     display: flex;
     justify-content: center;
