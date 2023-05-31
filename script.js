@@ -38,9 +38,8 @@ const Game = (gameMode) => {
     const playTurn = (squareIndex) => {
         if(gameMode === "PVP"){
             Gameboard.addMark(squareIndex, getCurrentPlayer().marker);
-            checkWin()
+            checkWin(_currentPlayer)
             switchPlayer()
-            ScreenController.render()
         }
         if(gameMode === "PVC") {
             legalMoves = legalMoves.filter(item => item != squareIndex)
@@ -49,25 +48,91 @@ const Game = (gameMode) => {
                 switchPlayer()
                 Gameboard.addMark(randomIndex, getCurrentPlayer().marker)
                 legalMoves = legalMoves.filter(item => item != randomIndex)
-                checkWin()
+                checkWin(_currentPlayer)
                 switchPlayer()
-                ScreenController.render()
                 computerPlays = false
             } else {
                 Gameboard.addMark(squareIndex, getCurrentPlayer().marker);
                 computerPlays = true
-                checkWin()
+                checkWin(_currentPlayer)
                 switchPlayer()
-                ScreenController.render()
                 if(isFinished === true) return
                 setTimeout(()=> {
                     Gameboard.addMark(randomIndex, getCurrentPlayer().marker)
                     legalMoves = legalMoves.filter(item => item != randomIndex)
-                    checkWin()
+                    checkWin(_currentPlayer)
                     switchPlayer()
-                    ScreenController.render()
                     computerPlays = false
                 }, 300)
+            }
+        }
+        if(gameMode === "PVC-hard") {
+            legalMoves = legalMoves.filter(item => item != squareIndex)
+            playMove(squareIndex, _player1)
+            function playMove(squareIndex, player) {
+                Gameboard.addMark(squareIndex, player.marker);
+                ScreenController.render()
+                if(winning(Gameboard.board, player) && player.marker === "X") {
+                    checkWin(_player1)
+                } else if(Gameboard.board.filter(mark => mark === "").length === 0){
+                    checkWin(_currentPlayer)
+                } else {
+                    let minimaxIndex = minimax(Gameboard.board, _player2).index
+                    Gameboard.addMark(minimaxIndex, _player2.marker);
+                    legalMoves = legalMoves.filter(item => item != minimaxIndex)
+                    ScreenController.render()
+                    if(winning(Gameboard.board, _player2)){
+                        checkWin(_player2)
+                    }
+                }
+            }
+
+            //Minimax algorithm
+            function minimax(newBoard, player){
+                let availableSquares = legalMoves
+                if(winning(newBoard, _player1)){
+                    return {score: 10}
+                } else if(winning(newBoard, _player2)){
+                    return {score: -10}
+                } else if(legalMoves.length === 0) {
+                    return {score: 0}
+                }
+                let moves = []
+                for(let i = 0; i < availableSquares.length; i++){
+                    let move = {}
+                    move.index = availableSquares[i]
+                    Gameboard.addMark(move.index, player.marker); //place the player's marker
+                    legalMoves = legalMoves.filter(item => item != move.index)
+                    if(player === _player1){
+                        let result = minimax(newBoard, _player2)
+                        move.score = result.score
+                    } else if(player === _player2){
+                        let result = minimax(newBoard, _player1)
+                        move.score = result.score
+                    }
+                    newBoard[availableSquares[i]] = "" // reset the board squares
+                    legalMoves.push(availableSquares[i])
+                    moves.push(move)
+                }
+                let bestMove 
+                if(player === _player1){
+                    let bestScore = -10000
+                    for(let i = 0; i < moves.length; i++){
+                        if(moves[i].score > bestScore){
+                            bestScore = moves[i].score
+                            bestMove = i
+                        }
+                    }
+                } else {
+                    let bestScore = 10000
+                    for(let i = 0; i < moves.length; i++){
+                        if(moves[i].score < bestScore){
+                            bestScore = moves[i].score
+                            bestMove = i
+                        }
+                    }
+                }
+                return moves[bestMove]
             }
         }
     }
@@ -75,13 +140,25 @@ const Game = (gameMode) => {
         _currentPlayer = _currentPlayer === _player1 ? _player2 : _player1
     }
     const getCurrentPlayer = () => _currentPlayer
-    const checkWin = () => {
-        const combinations = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
+
+    //winning combinations
+    const combinations = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
+    function winning(board, player) {
         for (let i = 0; i < combinations.length; i++) {
-            if(Gameboard.board[combinations[i][0]] === _currentPlayer.marker && 
-                Gameboard.board[combinations[i][1]] === _currentPlayer.marker &&
-                Gameboard.board[combinations[i][2]] === _currentPlayer.marker){
-                winner = _currentPlayer
+            if(board[combinations[i][0]] === player.marker && 
+                board[combinations[i][1]] === player.marker &&
+                board[combinations[i][2]] === player.marker){
+                return true
+                }
+            }
+        return false
+    }
+    const checkWin = (player) => {
+        for (let i = 0; i < combinations.length; i++) {
+            if(Gameboard.board[combinations[i][0]] === player.marker && 
+                Gameboard.board[combinations[i][1]] === player.marker &&
+                Gameboard.board[combinations[i][2]] === player.marker){
+                winner = player
                 finishGame(`${winner.name} wins!`)
                 getWinIndexes(combinations[i][0], combinations[i][1], combinations[i][2])
             }
@@ -90,6 +167,7 @@ const Game = (gameMode) => {
             isTie = true
             finishGame("Game is a tie!")
         }
+        ScreenController.render()
     }
     let getWinIndexes = (a, b, c) => {
         winArr = [a,b,c]
@@ -118,7 +196,7 @@ const Game = (gameMode) => {
         isFinished = false
         isTie = false
     }
-    return { playerOneMarker, playerTwoMarker, checkGameMode, checkComputerTurn, playTurn, checkFinished, restartGame, getWinner, getWinArr, checkTieStatus, getMessage, clearMessage }
+    return { playerOneMarker, playerTwoMarker, checkGameMode, checkComputerTurn, playTurn, checkFinished, checkWin, restartGame, getWinner, getWinArr, checkTieStatus, getMessage, clearMessage }
 }
 
 //Screen controller module for DOM
@@ -191,6 +269,11 @@ const ScreenController = (() => {
         if(boardCreated === false) createBoard()
         if(game.playerOneMarker === "O") game.playTurn() // if we (Player1) choose "O", computer ("X") plays first
     })
+    startBotHardBtn.addEventListener("click", ()=> {
+        toggleButtons()
+        game = Game("PVC-hard")
+        if(boardCreated === false) createBoard()
+    })
     const toggleButtons = () => {
         startBtn.classList.toggle("hidden")
         startBotBtn.classList.toggle("hidden")
@@ -206,6 +289,7 @@ const ScreenController = (() => {
     restartBtn.addEventListener("click", ()=> {
         if(game.checkGameMode() === "PVP") game = Game("PVP")
         if(game.checkGameMode() === "PVC") game = Game("PVC")
+        if(game.checkGameMode() === "PVC-hard") game = Game("PVC-hard")
         game.restartGame();
         render();
         removeColors();
