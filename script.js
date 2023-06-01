@@ -67,6 +67,10 @@ const Game = (gameMode) => {
             }
         }
         if(gameMode === "PVC-hard") {
+            if(squareIndex === undefined){
+                playMove(0, _player2)
+                return
+            }
             legalMoves = legalMoves.filter(item => item != squareIndex)
             playMove(squareIndex, _player1)
             function playMove(squareIndex, player) {
@@ -80,6 +84,7 @@ const Game = (gameMode) => {
                     let minimaxIndex = minimax(Gameboard.board, _player2).index
                     Gameboard.addMark(minimaxIndex, _player2.marker);
                     legalMoves = legalMoves.filter(item => item != minimaxIndex)
+                    checkWin(_player2)
                     ScreenController.render()
                     if(winning(Gameboard.board, _player2)){
                         checkWin(_player2)
@@ -223,6 +228,7 @@ const ScreenController = (() => {
         boardCreated = true
     }
     const render = ()=> {
+        removeColors() //there is a color bug without this when playing with "O" against computer
         Gameboard.board.forEach((marker, index)=> {
             container.childNodes[index].textContent = marker
             //Add marker colors
@@ -273,6 +279,7 @@ const ScreenController = (() => {
         toggleButtons()
         game = Game("PVC-hard")
         if(boardCreated === false) createBoard()
+        if(game.playerOneMarker === "O") game.playTurn()
     })
     const toggleButtons = () => {
         startBtn.classList.toggle("hidden")
@@ -294,6 +301,7 @@ const ScreenController = (() => {
         render();
         removeColors();
         if(game.checkGameMode() === "PVC" && game.playerOneMarker === "O") game.playTurn() // if we (Player1) choose "O", computer ("X") plays first
+        if(game.checkGameMode() === "PVC-hard" && game.playerOneMarker === "O") game.playTurn()
     })
     //Back to menu
     exitBtn.addEventListener("click", ()=> {
