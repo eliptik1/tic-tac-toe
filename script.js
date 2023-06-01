@@ -70,11 +70,13 @@ const Game = (gameMode) => {
             if(squareIndex === undefined){
                 playMove(0, _player2)
                 return
+            } else {
+                legalMoves = legalMoves.filter(item => item != squareIndex)
+                playMove(squareIndex, _player1)
             }
-            legalMoves = legalMoves.filter(item => item != squareIndex)
-            playMove(squareIndex, _player1)
             function playMove(squareIndex, player) {
                 Gameboard.addMark(squareIndex, player.marker);
+                computerPlays = true
                 ScreenController.render()
                 if(winning(Gameboard.board, player) && player.marker === "X") {
                     checkWin(_player1)
@@ -82,15 +84,19 @@ const Game = (gameMode) => {
                     checkWin(_currentPlayer)
                 } else {
                     let minimaxIndex = minimax(Gameboard.board, _player2).index
-                    Gameboard.addMark(minimaxIndex, _player2.marker);
-                    legalMoves = legalMoves.filter(item => item != minimaxIndex)
-                    checkWin(_player2)
-                    ScreenController.render()
-                    if(winning(Gameboard.board, _player2)){
+                    setTimeout(() => {
+                        Gameboard.addMark(minimaxIndex, _player2.marker);
+                        legalMoves = legalMoves.filter(item => item != minimaxIndex)
                         checkWin(_player2)
-                    }
+                        ScreenController.render()
+                        if(winning(Gameboard.board, _player2)){
+                            checkWin(_player2)
+                        }
+                        computerPlays = false
+                    }, 300);
                 }
             }
+            
 
             //Minimax algorithm
             function minimax(newBoard, player){
