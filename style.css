@@ -64,6 +64,7 @@ body {
     align-items: center;
 }
 .btn {
+    white-space: nowrap;
     flex: 1;
     width: 150px;
     margin-top: 0.7rem;
@@ -167,7 +168,7 @@ footer>p {
     .title {
         text-align: center;
         font-size: clamp(2rem, 0.875rem + 12vw, 5rem);
-        padding: 4rem 0 1rem;
+        padding: 0.5rem 0 1rem;
     }
     .pvp-title {
         font-size: clamp(0.8rem, 0.5375rem + 2.8vw, 1.5rem);
@@ -191,6 +192,7 @@ footer>p {
         margin: 0.4rem;
     }
     #game-board {
+        margin: 2rem auto 0;
         aspect-ratio: 1/1;
         width: 80vw;
         height: 80vw;
