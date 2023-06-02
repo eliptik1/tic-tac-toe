@@ -21,7 +21,6 @@ body {
 }
 
 #game-board {
-    /* outline: 4px solid rgb(60, 69, 92); */
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
@@ -32,7 +31,6 @@ body {
 
 .square {
     border: 6px solid rgb(202, 204, 210);
-    /* background-color: rgb(200, 214, 219); */
     color: rgb(40, 48, 68);
     font-size: 5rem;
     font-family: "reem kufi";
@@ -44,34 +42,7 @@ body {
     line-height: 1;
     user-select: none;
 }
-.tl-border {
-    border-left: 0;
-    border-top: 0;
-}
-.t-border {
-    border-top: 0;
-}
-.tr-border {
-    border-right: 0;
-    border-top: 0;
-}
-.l-border {
-    border-left: 0;
-}
-.r-border {
-    border-right: 0;
-}
-.bl-border {
-    border-left: 0;
-    border-bottom: 0;
-}
-.b-border {
-    border-bottom: 0;
-}
-.br-border {
-    border-right: 0;
-    border-bottom: 0;
-}
+
 #game-board .square:hover {
     background-color: rgba(158, 186, 197, 0.233);
 }
@@ -146,7 +117,10 @@ body {
     text-align: center;
     font-size: 24px;
 }
-
+.marker-container {
+    display: flex;
+    align-items: center;
+}
 input[type="radio"]::before {
     font-size: 48px;
     content: "X";
@@ -187,4 +161,78 @@ footer>p {
     color: rgb(34, 50, 72);
     font-size: 19px;
     font-family: Verdana, Tahoma, sans-serif
+}
+
+@media (max-width: 550px){
+    .title {
+        text-align: center;
+        font-size: clamp(2rem, 0.875rem + 12vw, 5rem);
+        padding: 4rem 0 1rem;
+    }
+    .pvp-title {
+        font-size: clamp(0.8rem, 0.5375rem + 2.8vw, 1.5rem);
+        margin: 0.4rem;
+    }
+    .players {
+        flex-direction: column;
+        margin-bottom: 3rem;
+    }
+    .marker-container {
+        transform: scale(0.8);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    input[type="radio"] {
+        margin: 0;
+        aspect-ratio: 1/1;
+    }
+    .players input[type="text"] {
+        margin: 0.4rem;
+    }
+    #game-board {
+        aspect-ratio: 1/1;
+        width: 80vw;
+        height: 80vw;
+    }
+    .square {
+        font-size: clamp(2rem, 0.875rem + 12vw, 5rem);
+        border: clamp(0.1875rem, 0.1172rem + 0.75vw, 0.375rem) solid rgb(202, 204, 210);
+    }
+    .buttons {
+        flex-direction: column;
+        gap: 0;
+    }
+    .result {
+        font-size: clamp(1.5rem, 1.125rem + 4vw, 2.5rem);
+    }
+}
+
+.tl-border {
+    border-left: 0;
+    border-top: 0;
+}
+.t-border {
+    border-top: 0;
+}
+.tr-border {
+    border-right: 0;
+    border-top: 0;
+}
+.l-border {
+    border-left: 0;
+}
+.r-border {
+    border-right: 0;
+}
+.bl-border {
+    border-left: 0;
+    border-bottom: 0;
+}
+.b-border {
+    border-bottom: 0;
+}
+.br-border {
+    border-right: 0;
+    border-bottom: 0;
 }

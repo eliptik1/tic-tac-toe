@@ -22,12 +22,16 @@
     <div class="btn-container">
         <h2 class="pvp-title">Player vs. Player:</h2>
         <div class="players">
-            <input class="btn" type="radio" name="marker" id="markerX" value="X" checked>    
-            <input class="btn" type="radio" name="marker" id="markerO" value="O">
+            <div class="marker-container">
+                <input class="btn" type="radio" name="marker" id="markerX" value="X" checked>    
+                <input class="btn" type="radio" name="marker" id="markerO" value="O">
+            </div>
             <input id="player1" type="text" maxlength="8" value="Player1">
             <input id="player2" type="text" maxlength="8" value="Player2">
-            <input class="btn markerX-2" type="radio" name="marker2" id="markerX">    
-            <input class="btn markerO-2" type="radio" name="marker2" id="markerO" checked>
+            <div class="marker-container">
+                <input class="btn markerX-2" type="radio" name="marker2" id="markerX">    
+                <input class="btn markerO-2" type="radio" name="marker2" id="markerO" checked>
+            </div>
         </div>
         <button class="btn" id="btn-start">Start Game</button>
         <button class="btn" id="btn-start-bot">Easy Bot</button>
