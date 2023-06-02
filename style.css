@@ -5,6 +5,13 @@
     font-family: "source sans pro";
 }
 
+body {
+    /* Footer fix*/
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
 .title {
     color: rgb(29, 66, 118);
     font-size: 5rem;
@@ -169,5 +176,15 @@ input[type="radio"]:checked {
 .result {
     margin-top: 2rem;
     font-size: 2.5rem;
-/*     color: rgb(29, 66, 118); */
+}
+footer {
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    margin-top: auto;
+}
+footer>p {
+    color: rgb(34, 50, 72);
+    font-size: 19px;
+    font-family: Verdana, Tahoma, sans-serif
 }

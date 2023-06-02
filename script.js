@@ -270,6 +270,14 @@ const ScreenController = (() => {
     const title = document.querySelector(".title")
     const pvpTitle = document.querySelector(".pvp-title")
     const players = document.querySelector(".players")
+    const markerSelectX = document.querySelector("#markerX")
+    const markerSelectO = document.querySelector("#markerO")
+    const markerSelectX2 = document.querySelector(".markerX-2")
+    const markerSelectO2 = document.querySelector(".markerO-2")
+    markerSelectO.addEventListener("click", ()=> markerSelectX2.checked = true)
+    markerSelectX.addEventListener("click", ()=> markerSelectO2.checked = true)
+    markerSelectO2.addEventListener("click", ()=> markerSelectX.checked = true)
+    markerSelectX2.addEventListener("click", ()=> markerSelectO.checked = true)
     startBtn.addEventListener("click", ()=> {
         toggleButtons()
         game = Game("PVP") // re-assign the variable for updating playerName1 and playerName2

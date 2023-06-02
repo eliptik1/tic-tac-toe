@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Tic-Tac-Toe</title>
 </head>
 <body>
@@ -25,6 +26,8 @@
             <input class="btn" type="radio" name="marker" id="markerO" value="O">
             <input id="player1" type="text" maxlength="8" value="Player1">
             <input id="player2" type="text" maxlength="8" value="Player2">
+            <input class="btn markerX-2" type="radio" name="marker2" id="markerX">    
+            <input class="btn markerO-2" type="radio" name="marker2" id="markerO" checked>
         </div>
         <button class="btn" id="btn-start">Start Game</button>
         <button class="btn" id="btn-start-bot">Easy Bot</button>
@@ -34,7 +37,13 @@
             <button class="btn hidden" id="btn-exit">Go Back</button>
         </div>
     </div>
-    
+    <footer>
+        <p> Copyright © 2023 eliptik1 
+            <a href="https://github.com/eliptik1">
+                <i class="fa fa-github" style="font-size:26px; color: rgb(34, 50, 72)"></i>
+            </a>
+        </p>
+    </footer>
     <script src="./script.js"></script>
 </body>
 </html>
